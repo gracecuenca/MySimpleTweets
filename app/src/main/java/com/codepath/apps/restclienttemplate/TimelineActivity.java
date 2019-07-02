@@ -50,11 +50,9 @@ public class TimelineActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Log.d("TwitterClient", response.toString());
-
             }
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                // Log.d("TwitterClient", response.toString());
                 // iterate through the JSON array
                 // for each entry, deserialize the JSON object
 
@@ -71,7 +69,6 @@ public class TimelineActivity extends AppCompatActivity {
                     }
                 }
             }
-
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
