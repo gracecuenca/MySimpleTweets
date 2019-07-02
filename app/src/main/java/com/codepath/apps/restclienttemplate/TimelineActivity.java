@@ -28,7 +28,8 @@ public class TimelineActivity extends AppCompatActivity {
     RecyclerView rvTweets;
 
     // a numeric code to identify the edit activity
-    public static final int EDIT_REQUEST_CODE = 20;
+    public static final int REQUEST_CODE = 20;
+    public static final int RESULT_OK = 21;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +52,6 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     // creating the compose tweet action item
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -63,7 +63,21 @@ public class TimelineActivity extends AppCompatActivity {
     public void onComposeAction(MenuItem mi) {
         // configuring the action item to launch ComposeActivity using intents
         Intent i = new Intent(TimelineActivity.this, ComposeActivity.class);
-        startActivityForResult(i, EDIT_REQUEST_CODE); // brings up the second activity
+        startActivityForResult(i, REQUEST_CODE); // brings up the second activity
+    }
+
+    // handle the tweet being sent back
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // check request code and result code first
+        if(requestCode == REQUEST_CODE && resultCode == RESULT_OK){
+            // Use data parameter
+            Tweet tweet = (Tweet) data.getSerializableExtra("tweet");
+            tweets.add(0, tweet);
+            tweetAdapter.notifyItemInserted(0);
+            rvTweets.scrollToPosition(0);
+            rvTweets.scrollToPosition(0);
+        }
     }
 
     private void populateTimeline(){
