@@ -1,10 +1,13 @@
 package com.codepath.apps.restclienttemplate;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -24,6 +27,9 @@ public class TimelineActivity extends AppCompatActivity {
     ArrayList<Tweet> tweets;
     RecyclerView rvTweets;
 
+    // a numeric code to identify the edit activity
+    public static final int EDIT_REQUEST_CODE = 20;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +48,22 @@ public class TimelineActivity extends AppCompatActivity {
         // set the adapter
         rvTweets.setAdapter(tweetAdapter);
         populateTimeline();
+    }
+
+    // creating the compose tweet action item
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    // handle click here
+    public void onComposeAction(MenuItem mi) {
+        // configuring the action item to launch ComposeActivity using intents
+        Intent i = new Intent(TimelineActivity.this, ComposeActivity.class);
+        startActivityForResult(i, EDIT_REQUEST_CODE); // brings up the second activity
     }
 
     private void populateTimeline(){
