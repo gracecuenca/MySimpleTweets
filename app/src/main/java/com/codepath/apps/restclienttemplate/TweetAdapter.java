@@ -14,6 +14,7 @@ import com.codepath.apps.restclienttemplate.models.Tweet;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -91,5 +92,18 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
         }
 
         return relativeDate;
+    }
+
+    // refresh page functions
+    // Clean all elements of the recycler
+    public void clear() {
+        mTweets.clear();
+        notifyDataSetChanged();
+    }
+
+    // Add a list of items
+    public void addAll(ArrayList<Tweet> list) {
+        mTweets.addAll(list);
+        notifyDataSetChanged();
     }
 }

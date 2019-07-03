@@ -1,8 +1,10 @@
 package com.codepath.apps.restclienttemplate;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -27,6 +29,9 @@ public class ComposeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compose);
+
+        ActionBar bar = getSupportActionBar();
+        bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.twitter_blue)));
     }
 
     public void composeTweet(View v){
@@ -49,6 +54,12 @@ public class ComposeActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     Log.e("ComposeActivity", "Couldn't compose new tweet");
                 }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d("ComposeActivity", errorResponse.toString());
+                throwable.printStackTrace();
             }
         });
 
