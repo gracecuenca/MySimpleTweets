@@ -18,6 +18,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -36,6 +37,9 @@ public class TimelineActivity extends AppCompatActivity {
 
     // needed for refresh by pull down
     private SwipeRefreshLayout swipeContainer;
+
+    // Instance of the progress action-view
+    MenuItem miActionProgressItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +82,7 @@ public class TimelineActivity extends AppCompatActivity {
 
     //
     public void fetchTimelineAsync() {
+        showProgressBar();
         // Send the network request to fetch the updated data
         client.getHomeTimeline(new JsonHttpResponseHandler() {
             @Override
@@ -97,6 +102,7 @@ public class TimelineActivity extends AppCompatActivity {
                 tweetAdapter.addAll(tweets);
                 // Now we call setRefreshing(false) to signal refresh has finished
                 swipeContainer.setRefreshing(false);
+                hideProgressBar();
             }
 
             @Override
@@ -129,12 +135,32 @@ public class TimelineActivity extends AppCompatActivity {
         // check request code and result code first
         if(requestCode == REQUEST_CODE && resultCode == RESULT_OK){
             // Use data parameter
-            Tweet tweet = (Tweet) data.getSerializableExtra("tweet");
+            Tweet tweet = (Tweet) Parcels.unwrap(data.getParcelableExtra("tweet"));
             tweets.add(0, tweet);
             tweetAdapter.notifyItemInserted(0);
             rvTweets.scrollToPosition(0);
             rvTweets.scrollToPosition(0);
         }
+    }
+
+    // displaying the progress bar
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // Store instance of the menu item containing progress
+        miActionProgressItem = menu.findItem(R.id.miActionProgress);
+        // Return to finish
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    // toggling the visibility of the progress bar
+    public void showProgressBar() {
+        // Show progress item
+        miActionProgressItem.setVisible(true);
+    }
+
+    public void hideProgressBar() {
+        // Hide progress item
+        miActionProgressItem.setVisible(false);
     }
 
     private void populateTimeline(){

@@ -3,7 +3,6 @@ package com.codepath.apps.restclienttemplate;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -15,6 +14,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -46,9 +46,8 @@ public class ComposeActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
                     Tweet tweet = Tweet.fromJSON(response);
-                    // might need to send back a user as well?
                     Intent i = new Intent();
-                    i.putExtra(Tweet.class.getSimpleName(), (Parcelable) tweet);
+                    i.putExtra(Tweet.class.getSimpleName(), Parcels.wrap(tweet));
                     setResult(RESULT_OK, i);
                     finish();
                 } catch (JSONException e) {
