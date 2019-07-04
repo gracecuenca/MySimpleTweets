@@ -8,6 +8,11 @@
         android:title="Compose Tweet"
         app:showAsAction="always"></item>
 
+    <vector
+        android:tint="@color/twitter_blue">
+
+    </vector>
+
     <item
         android:id="@+id/miActionProgress"
         android:title="Loading..."

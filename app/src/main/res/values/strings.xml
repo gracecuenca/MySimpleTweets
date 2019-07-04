@@ -7,7 +7,6 @@
     <string name="intent_host">cprest</string>
 
     <color name="medium_green">#ff17bf63</color>
-    <color name="medium_gray">#ffaab8c2</color>
     <color name="medium_gray_30">#4daab8c2</color>
     <color name="medium_gray_50">#80aab8c2</color>
     <color name="light_gray">#ffccd6dd</color>
@@ -25,5 +24,6 @@
     <color name="inline_action_pressed">@color/medium_gray_50</color>
     <color name="inline_action_retweet">@color/medium_green</color>
     <color name="inline_action_retweet_pressed">@color/medium_gray_50</color>
+    <color name="medium_gray">#ffaab8c2</color>
 
 </resources>
