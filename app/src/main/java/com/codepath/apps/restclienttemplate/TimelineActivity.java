@@ -42,10 +42,19 @@ public class TimelineActivity extends AppCompatActivity {
     // Instance of the progress action-view
     MenuItem miActionProgressItem;
 
+    // needed for infinite pagination
+    private LinearLayoutManager linearLayoutManager;
+    private EndlessRecyclerViewScrollListener scrollListener;
+
+    // max_id that is updated and tracked for infinite pagenation
+    private long max_id = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
+
+        // setting up the twitter blue and twitter bird logo in the action bar
         ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.twitter_blue)));
         bar.setLogo(R.drawable.ic_launcher_twitter);
@@ -60,6 +69,20 @@ public class TimelineActivity extends AppCompatActivity {
         // find the RecyclerView
         rvTweets = (RecyclerView) findViewById(R.id.rvTweet);
         rvTweets.addItemDecoration(new DividerItemDecoration(rvTweets.getContext(), DividerItemDecoration.VERTICAL));
+        linearLayoutManager = new LinearLayoutManager(this);
+        rvTweets.setLayoutManager(linearLayoutManager);
+
+        // enabling endless pagination
+
+        // setting up the scrollListener
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                fetchTimelineAsync(true);
+            }
+        };
+
+        rvTweets.addOnScrollListener(scrollListener);
 
         // Lookup the swipe container view
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
@@ -67,7 +90,7 @@ public class TimelineActivity extends AppCompatActivity {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                fetchTimelineAsync();
+                fetchTimelineAsync(false);
             }
         });
         // Configure the refreshing colors
@@ -81,23 +104,33 @@ public class TimelineActivity extends AppCompatActivity {
         // construct the adapter from this data source
         tweetAdapter = new TweetAdapter(tweets);
         // RecyclerView setup (layout manager, use adapter)
-        rvTweets.setLayoutManager(new LinearLayoutManager(this));
+        rvTweets.setLayoutManager(linearLayoutManager);
         // set the adapter
         rvTweets.setAdapter(tweetAdapter);
-        // set the twitter color
+
         populateTimeline();
     }
 
     //
-    public void fetchTimelineAsync() {
+    public void fetchTimelineAsync(final boolean isNotRefresh) {
+
+        if(isNotRefresh){
+            max_id = tweets.get(tweets.size()-1).uid;
+        }
+        else{
+            max_id = -1;
+        }
+
         showProgressBar();
         // Send the network request to fetch the updated data
-        client.getHomeTimeline(new JsonHttpResponseHandler() {
+        client.getHomeTimeline(max_id, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 // Remember to CLEAR OUT old items before appending in the new ones
-                tweetAdapter.clear();
-                // ...the data has come back, add new items to your adapter...
+                if(!isNotRefresh) {
+                    tweetAdapter.clear();
+                }
+                // ...the data has come back, add new items to your adapter..
                 for(int i = 0; i < response.length(); i++){
                     try {
                         Tweet tweet = Tweet.fromJSON(response.getJSONObject(i));
@@ -172,7 +205,7 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     private void populateTimeline(){
-        client.getHomeTimeline(new JsonHttpResponseHandler(){
+        client.getHomeTimeline(max_id, new JsonHttpResponseHandler(){
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
