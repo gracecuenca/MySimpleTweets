@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -47,11 +48,18 @@ public class TimelineActivity extends AppCompatActivity {
         setContentView(R.layout.activity_timeline);
         ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.twitter_blue)));
+        bar.setLogo(R.drawable.ic_launcher_twitter);
+        bar.setHomeButtonEnabled(true);
+        bar.setDisplayShowHomeEnabled(true);
+        bar.setDisplayUseLogoEnabled(true);
+        bar.setDisplayShowTitleEnabled(false);
+        bar.setIcon(R.drawable.ic_launcher_twitter); //also displays wide logo
 
         client = TwitterApp.getRestClient(getApplicationContext());
 
         // find the RecyclerView
         rvTweets = (RecyclerView) findViewById(R.id.rvTweet);
+        rvTweets.addItemDecoration(new DividerItemDecoration(rvTweets.getContext(), DividerItemDecoration.VERTICAL));
 
         // Lookup the swipe container view
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);

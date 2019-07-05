@@ -32,6 +32,12 @@ public class ComposeActivity extends AppCompatActivity {
 
         ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.twitter_blue)));
+        bar.setLogo(R.drawable.ic_launcher_twitter);
+        bar.setHomeButtonEnabled(true);
+        bar.setDisplayShowHomeEnabled(true);
+        bar.setDisplayUseLogoEnabled(true);
+        bar.setDisplayShowTitleEnabled(false);
+        bar.setIcon(R.drawable.ic_launcher_twitter); //also displays wide logo
     }
 
     public void composeTweet(View v){
