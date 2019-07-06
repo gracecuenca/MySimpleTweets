@@ -52,6 +52,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
 
         // using Glide to get the profile picture images
         Glide.with(context).load(tweet.user.profileImageUrl).into(holder.ivProfileImage);
+        // using Glide to get the media image
+        Glide.with(context).load(tweet.image).into(holder.ivImage);
     }
 
     // getItemCount method which must be implemented as per RecyclerView adapter
@@ -67,6 +69,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
         public TextView tvBody;
         public TextView tvTimeStamp;
         public TextView tvHandle;
+        public ImageView ivImage;
 
         public ViewHolder(View itemView){
             super(itemView);
@@ -76,6 +79,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
             tvBody = (TextView) itemView.findViewById(R.id.tvBody);
             tvTimeStamp = (TextView) itemView.findViewById(R.id.tvTimeStamp);
             tvHandle = (TextView) itemView.findViewById(R.id.tvHandle);
+            ivImage = (ImageView) itemView.findViewById(R.id.ivImage);
         }
     }
 
