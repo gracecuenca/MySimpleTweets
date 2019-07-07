@@ -30,6 +30,7 @@ public class ComposeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compose);
 
+        // making the action bar more twitter-like
         ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.twitter_blue)));
         bar.setLogo(R.drawable.ic_launcher_twitter);
@@ -37,16 +38,17 @@ public class ComposeActivity extends AppCompatActivity {
         bar.setDisplayShowHomeEnabled(true);
         bar.setDisplayUseLogoEnabled(true);
         bar.setDisplayShowTitleEnabled(false);
-        bar.setIcon(R.drawable.ic_launcher_twitter); //also displays wide logo
+        bar.setIcon(R.drawable.ic_launcher_twitter);
     }
 
     public void composeTweet(View v){
         client = new TwitterClient(getApplicationContext());
 
-        // getting the contents of the new tweet
+        // getting the contents of the new tweet entered by user
         EditText etTweet = (EditText) findViewById(R.id.etTweet);
         String itemText = etTweet.getText().toString();
 
+        // sending the contents of the tweet through an intent
         client.sendTweet(itemText, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {

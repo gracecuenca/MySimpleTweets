@@ -6,11 +6,11 @@ import org.json.JSONObject;
 
 public class Tweet {
 
-    // list out the attributes
     public String body;
     public long uid; // database ID for the tweet
     public User user;
     public String createdAt;
+    // entities needed to retrieve media
     public JSONObject entities;
     public JSONArray media;
     public String image;

@@ -5,7 +5,6 @@ import org.json.JSONObject;
 
 public class User {
 
-    // list the attributes
     public String name;
     public long uid;
     public String screenName;

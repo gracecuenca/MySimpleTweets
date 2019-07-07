@@ -32,7 +32,7 @@ public class TimelineActivity extends AppCompatActivity {
     ArrayList<Tweet> tweets;
     RecyclerView rvTweets;
 
-    // a numeric code to identify the edit activity
+    // numeric codes to identify the edit activity
     public static final int REQUEST_CODE = 20;
     public static final int RESULT_OK = 21;
 
@@ -72,8 +72,7 @@ public class TimelineActivity extends AppCompatActivity {
         linearLayoutManager = new LinearLayoutManager(this);
         rvTweets.setLayoutManager(linearLayoutManager);
 
-        // enabling endless pagination
-
+        // enabling endless pagination below
         // setting up the scrollListener
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
@@ -111,7 +110,11 @@ public class TimelineActivity extends AppCompatActivity {
         populateTimeline();
     }
 
-    //
+    // method to fetch new data
+    // when isNotRefresh is true, we fetch data for the first time and max_id is -1
+    // so that the default page is shown
+    // when false, it indicates that infinite pagenation is enabled and max_id is
+    // set to the top of the next tweet id
     public void fetchTimelineAsync(final boolean isNotRefresh) {
 
         if(isNotRefresh){
@@ -204,6 +207,7 @@ public class TimelineActivity extends AppCompatActivity {
         miActionProgressItem.setVisible(false);
     }
 
+    // populating the timeline initially
     private void populateTimeline(){
         client.getHomeTimeline(max_id, new JsonHttpResponseHandler(){
 
